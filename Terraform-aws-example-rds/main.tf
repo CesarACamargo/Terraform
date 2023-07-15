@@ -15,7 +15,7 @@ provider "aws" {
 
   default_tags {
     tags = {
-      owner      = "cacamargo"
+      owner      = "dev-infra"
       managed-by = "terraform"
     }
   }
