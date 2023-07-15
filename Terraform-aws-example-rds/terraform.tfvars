@@ -1,0 +1,10 @@
+project_name   = "database-coins"
+environment    = "test"
+db_name        = "dbcoins"
+engine         = "postgres"
+engine_version = "14.7"
+db_username    = "postgres"
+db_password    = "{{var.pwd}}"
+instance_class = "db.t3.micro"
+key_pair_name  = "pair-edz"
+
