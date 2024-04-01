@@ -1,0 +1,68 @@
+/*
+data "aws_vpc" "vpc_conn" {
+  tags = {
+    Name = "vpc_conn" # Substitua pelo nome da sua VPC Nova
+  }
+}
+*/
+
+resource "aws_security_group" "instance_connect_sg" {
+  name        = "instance_connect_tf"
+  description = "TF - Security group connect"
+  vpc_id      = var.vpc_id
+#  vpc_id      = data.aws_vpc.vpc_conn.id
+
+  egress {
+    protocol    = -1
+    from_port   = 0
+    to_port     = 0
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_security_group" "instance_connect_win_sg" {
+  name        = "instance_connect_win"
+  description = "TF - EC2 instance connect Windows"
+  vpc_id      = var.vpc_id
+#  vpc_id      = data.aws_vpc.vpc_conn.id
+
+  ingress {
+    from_port       = 3389
+    to_port         = 3389
+    protocol        = "tcp"
+    cidr_blocks     = ["0.0.0.0/0"]
+    security_groups = [aws_security_group.instance_connect_sg.id] # ID bastion
+    description     = "Liberado para EC2 Instance Connect"
+  }
+
+  egress {
+    protocol    = -1
+    from_port   = 0
+    to_port     = 0
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_security_group" "instance_connect_lnx_sg" {
+  name        = "instance_connect_lnx"
+  description = "TF - EC2 instance connect Linux"
+  vpc_id      = var.vpc_id
+#  vpc_id      = data.aws_vpc.vpc_conn.id
+
+  ingress {
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
+    cidr_blocks     = ["0.0.0.0/0"]
+    security_groups = [aws_security_group.instance_connect_sg.id] # ID bastion
+    description     = "Liberado para EC2 Instance Connect"
+  }
+
+  egress {
+    protocol    = -1
+    from_port   = 0
+    to_port     = 0
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
